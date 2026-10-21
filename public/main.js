@@ -69,7 +69,6 @@ const state = {
   centerIndex: 0,
   offset: 0,
   spinning: false,
-  opener: null,
 };
 
 // ---------- 서지정보 분리 (docs/자료조사.md 3.3) ----------
@@ -381,6 +380,7 @@ async function spin() {
 }
 
 // ---------- 모달 ----------
+// 모달은 언제나 '책 한 권 뽑기'(또는 그 흐름의 '다른 책 만나기')로 열리므로, 닫으면 그 버튼으로 초점을 돌린다.
 
 function searchUrl(base, param, title) {
   const url = new URL(base);
@@ -400,7 +400,6 @@ function openModal(book) {
   el.linkLibrary.href = searchUrl("https://www.data4library.kr/srch", "srchText", book.title);
   el.linkStore.href = searchUrl("https://search.kyobobook.co.kr/search", "keyword", book.title);
 
-  state.opener = document.activeElement instanceof HTMLElement ? document.activeElement : el.draw;
   el.modal.showModal();
   el.modalReading.scrollTop = 0;
   el.modalReview.scrollTop = 0;
@@ -413,8 +412,7 @@ function closeModal() {
 
 el.modal.addEventListener("close", () => {
   el.draw.disabled = state.set.length === 0;
-  const target = state.opener && document.contains(state.opener) && !state.opener.disabled ? state.opener : el.draw;
-  target.focus();
+  el.draw.focus();
 });
 
 el.modalClose.addEventListener("click", closeModal);
