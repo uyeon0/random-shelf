@@ -1,18 +1,16 @@
 :root {
-  /* --color-text, --color-accent, --color-text-secondary는 임시값: DESIGN.md 2장 */
+  /* 토큰 값은 docs/DESIGN.md 12장과 같다. */
   --color-bg: #FAF9F6;
   --color-text: #111111;
   --color-accent: #E4321B;
   --color-text-secondary: #3D3D3D;
+  --color-rule: #111111;
   --color-border: #DEDEDE;
-  --color-overlay: rgba(0, 0, 0, .45);
-
-  /* 임시값: DESIGN.md 14.1 */
   --color-surface: #FFFFFF;
   --color-primary-hover: #000000;
   --color-secondary-hover: #ECE9E2;
-  --color-rule: #111111;
-  --shadow-cover: 0 4px 16px rgba(0, 0, 0, .12);
+  --color-overlay: rgba(0, 0, 0, .45);
+
   --mark-width: 2px;
   --mark-length: 12px;
   --mark-space: 16px;
@@ -27,6 +25,7 @@
   --cover-gap: 16px;
   --cover-width: 140px;
   --radius-default: 0;
+  --shadow-cover: 0 4px 16px rgba(0, 0, 0, .12);
   --shadow-modal: 0 8px 32px rgba(0, 0, 0, .12);
 
   --modal-padding: 20px;
@@ -524,7 +523,7 @@ h1, h2, h3, p {
   line-height: 1.5;
 }
 
-/* 책 속 한 문장: 왼쪽 강조색 세로줄의 인용 블록. 스크롤하지 않고 늘 보인다. */
+/* 책 속 한 문장: 왼쪽 강조색 세로줄의 인용 블록 */
 .modal-quote {
   flex: none;
   margin-top: 24px;
