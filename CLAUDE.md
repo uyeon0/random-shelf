@@ -12,12 +12,12 @@
 
 ## 미확정 항목
 
-`DESIGN.md` 14장에 미확정 항목이 있고, `기획서.md` 10장에 실제 API로 확인할 항목이 있다. 구현하다 미확정 항목에 걸리면 값을 임의로 정하지 않고 사용자에게 묻는다. `DESIGN.md`의 대안값을 기본값으로 쓰지 않는다. 사용자가 정한 내용은 해당 문서에 반영한다.
+`DESIGN.md` 14장에 미확정 항목이 있다. 구현하다 미확정 항목이나 문서에 없는 값에 걸리면 임의로 정하지 않고 사용자에게 묻는다. 사용자가 정한 내용은 해당 문서에 반영한다. 출시 전 점검 항목은 `기획서.md` 10장에 있다.
 
 ## 기술 스택과 파일 구성
 
 - HTML, CSS, JavaScript만 쓴다. 프레임워크와 빌드 도구는 쓰지 않는다.
-- 페이지는 `index.html` 하나다. 스타일은 `style.css`, 스크립트는 `main.js`로 나눈다.
+- 페이지는 `public/index.html` 하나다. 스타일은 `public/style.css`, 스크립트는 `public/main.js`로 나눈다. Netlify는 `public/`만 배포한다.
 - API 중계는 Netlify Functions로 한다. 함수 파일은 `netlify/functions/` 아래에 둔다.
 - 폰트는 Pretendard 하나만 CDN에서 불러온다. 세리프 글꼴은 쓰지 않는다.
 - 아이콘은 Lucide outline에서 필요한 것만 SVG로 직접 넣는다.
@@ -28,7 +28,7 @@
 
 - 로컬: `.env.example`을 `.env`로 복사하고 `SEJONG_API_KEY` 값을 채운다. `netlify dev`가 이 파일을 읽어 함수에 넘긴다. `.env`는 커밋하지 않는다.
 - 배포: Netlify 사이트 환경변수에 같은 이름으로 둔다.
-- 키를 `index.html`, `main.js`, 함수 응답, 로그에 넣지 않는다.
+- 키를 `public/` 아래 파일, 함수 응답, 로그에 넣지 않는다.
 - `.env`는 사용자가 직접 만든다. Claude는 `.env`를 읽거나 키 값을 출력하지 않는다.
 
 ## 로컬 확인과 배포
