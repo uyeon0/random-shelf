@@ -19,7 +19,7 @@
 - HTML, CSS, JavaScript만 쓴다. 프레임워크와 빌드 도구는 쓰지 않는다.
 - 페이지는 `index.html` 하나다. 스타일은 `style.css`, 스크립트는 `main.js`로 나눈다.
 - API 중계는 Netlify Functions로 한다. 함수 파일은 `netlify/functions/` 아래에 둔다.
-- 폰트(Pretendard, Noto Serif KR)는 CDN에서 불러온다.
+- 폰트는 Pretendard 하나만 CDN에서 불러온다. 세리프 글꼴은 쓰지 않는다.
 - 아이콘은 Lucide outline에서 필요한 것만 SVG로 직접 넣는다.
 
 ## API 키
