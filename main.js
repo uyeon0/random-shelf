@@ -51,6 +51,8 @@ const el = {
   modalAuthor: $("modal-author"),
   modalPub: $("modal-pub"),
   modalReview: $("modal-review"),
+  modalQuote: $("modal-quote"),
+  modalQuoteText: $("modal-quote-text"),
   linkLibrary: $("link-library"),
   linkStore: $("link-store"),
   redraw: $("redraw"),
@@ -138,6 +140,25 @@ function cutRelated(review) {
   return review;
 }
 
+// 추천 글은 대개 '본문 → 저자 소개 → 책 속 한 문장' 순서다.
+// 저자 소개는 버리고, 본문과 책 속 한 문장을 나눠 돌려준다.
+const AUTHOR_INTRO = /(저\s*자|작\s*가|지은이)\s*소\s*개/;
+const QUOTE_HEAD = /책\s*속\s*한\s*문장/;
+
+function splitReview(review) {
+  const a = review.match(AUTHOR_INTRO);
+  const q = review.match(QUOTE_HEAD);
+  const cuts = [a?.index, q?.index].filter((i) => i !== undefined);
+  const body = (cuts.length ? review.slice(0, Math.min(...cuts)) : review).trim();
+  let quote = "";
+  if (q) {
+    const start = q.index + q[0].length;
+    const end = a && a.index > q.index ? a.index : review.length;
+    quote = review.slice(start, end).trim();
+  }
+  return { body, quote };
+}
+
 // text 앞쪽에서 title의 문자·숫자를 순서대로 맞춰 소비하고, 끝난 위치를 돌려준다.
 function consumeTitle(text, title) {
   const target = sig(title);
@@ -195,11 +216,13 @@ function parseBook(item) {
   if (!author || JUNK.test(author)) return null;
   if (!ROLE.test(author) && (useComma || author.length > 15)) return null;
   author = stripSubtitle(author, review);
+  const { body, quote } = splitReview(review);
+  if (!body) return null;
 
   const publisher = segs[segs.length - 1].split(/\s*,\s*/).filter(Boolean).pop();
   if (!publisher || JUNK.test(publisher)) return null;
 
-  return { title, author, publisher, year: m[1], kdc: m[2], review, cover };
+  return { title, author, publisher, year: m[1], kdc: m[2], review: body, quote, cover };
 }
 
 // ---------- 데이터 ----------
@@ -370,6 +393,8 @@ function openModal(book) {
   el.modalAuthor.textContent = book.author;
   el.modalPub.textContent = `${book.publisher} · ${book.year}`;
   el.modalReview.textContent = book.review;
+  el.modalQuoteText.textContent = book.quote;
+  el.modalQuote.hidden = !book.quote;
   el.linkLibrary.href = searchUrl("https://www.data4library.kr/srch", "srchText", book.title);
   el.linkStore.href = searchUrl("https://search.kyobobook.co.kr/search", "keyword", book.title);
 

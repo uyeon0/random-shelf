@@ -506,6 +506,26 @@ h1, h2, h3, p {
   line-height: 1.5;
 }
 
+/* 책 속 한 문장: 왼쪽 강조색 세로줄의 인용 블록. 스크롤하지 않고 늘 보인다. */
+.modal-quote {
+  flex: none;
+  margin-top: 24px;
+}
+
+.modal-quote .modal-label {
+  margin-top: 0;
+}
+
+.modal-quote-text {
+  margin: 8px 0 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--color-accent);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -.01em;
+}
+
 /* 모달에서 추천 글만 스크롤한다. 나머지 정보와 버튼은 늘 보인다. */
 .modal-review {
   flex: 1 1 auto;
