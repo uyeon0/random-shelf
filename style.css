@@ -290,6 +290,58 @@ h1, h2, h3, p {
   margin-top: 16px;
 }
 
+/* 푸터: 판권면처럼 라벨과 내용을 나란히 둔다 */
+
+.site-footer {
+  padding-block: 32px 48px;
+  border-top: 1px solid var(--color-rule);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.colophon {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.colophon-row {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+
+.colophon dt {
+  font-weight: 600;
+}
+
+.colophon dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.colophon a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.colophon a svg {
+  margin-left: 4px;
+  vertical-align: -4px;
+}
+
+.colophon-note {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .colophon {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--block-gap);
+  }
+}
+
 /* 버튼 */
 
 .btn {
