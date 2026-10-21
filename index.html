@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RANDOM SHELF</title>
+  <meta name="description" content="표지 룰렛을 돌려 우연히 만나는 한 권의 책">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <header class="site-header container">
+    <a class="logo" href="/">RANDOM SHELF</a>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 class="hero-title">우연히 만나는<br>한 권의 책</h1>
+      <div class="hero-side">
+        <p class="hero-desc">오늘은 어떤 책을 만나게 될까요?</p>
+        <div class="filters" role="radiogroup" aria-label="분야 필터" aria-describedby="filter-desc">
+          <button type="button" class="chip" role="radio" aria-checked="true" data-filter="all">아무거나</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" data-filter="story">이야기와 문장</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" data-filter="world">세상과 사람</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" data-filter="science">과학과 기술</button>
+        </div>
+        <p class="filter-desc" id="filter-desc">분야 상관없이 모든 책에서 뽑아요</p>
+      </div>
+    </section>
+
+    <section class="stage" aria-label="책 룰렛">
+      <p class="sr-only" id="status" aria-live="polite"></p>
+
+      <div class="roulette" id="roulette" aria-hidden="true">
+        <div class="roulette-track" id="track"></div>
+        <div class="roulette-mark"></div>
+      </div>
+
+      <div class="notice" id="notice" hidden>
+        <p class="notice-title" id="notice-title"></p>
+        <p class="notice-desc" id="notice-desc"></p>
+        <button type="button" class="btn btn-secondary" id="notice-btn"></button>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-cta" id="draw" disabled>책 한 권 뽑기</button>
+    </section>
+  </main>
+
+  <dialog class="modal" id="modal" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" id="modal-close" aria-label="닫기">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <div class="modal-body">
+      <img class="modal-cover" id="modal-cover" alt="">
+      <div class="modal-info">
+        <h2 class="modal-title" id="modal-title"></h2>
+        <p class="modal-meta" id="modal-author"></p>
+        <p class="modal-meta" id="modal-pub"></p>
+        <h3 class="modal-label">사서의 추천 글</h3>
+        <p class="modal-review" id="modal-review"></p>
+        <div class="modal-actions">
+          <a class="btn btn-primary" id="link-library" target="_blank" rel="noopener noreferrer">도서관 검색</a>
+          <a class="btn btn-secondary" id="link-store" target="_blank" rel="noopener noreferrer">서점 검색</a>
+        </div>
+        <button type="button" class="btn-text" id="redraw">다른 책 만나기</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
