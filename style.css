@@ -359,7 +359,7 @@ h1, h2, h3, p {
   width: calc(100% - 32px);
   max-width: 800px;
   max-height: 85dvh;
-  overflow-y: auto;
+  overflow-y: auto; /* 화면이 아주 낮을 때만 모달 전체가 스크롤된다 */
   padding: 0;
   border: 0;
   border-radius: var(--radius-default);
@@ -369,6 +369,8 @@ h1, h2, h3, p {
 }
 
 .modal[open] {
+  display: flex;
+  flex-direction: column;
   animation: modal-in 250ms ease-out;
 }
 
@@ -404,6 +406,7 @@ h1, h2, h3, p {
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  min-height: 0;
   padding: var(--modal-padding);
 }
 
@@ -417,9 +420,12 @@ h1, h2, h3, p {
 
 .modal-info {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: flex-start;
+  align-self: stretch;
   min-width: 0;
+  min-height: 0;
 }
 
 .modal-title {
@@ -448,8 +454,14 @@ h1, h2, h3, p {
   line-height: 1.5;
 }
 
+/* 모달에서 추천 글만 스크롤한다. 나머지 정보와 버튼은 늘 보인다. */
 .modal-review {
+  flex: 1 1 auto;
+  min-height: 96px;
   margin-top: 8px;
+  padding-right: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .modal-actions {
@@ -466,8 +478,12 @@ h1, h2, h3, p {
 @media (min-width: 1024px) {
   .modal-body {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 32px;
+  }
+
+  .modal-cover {
+    align-self: flex-start;
   }
 
   .modal-title {

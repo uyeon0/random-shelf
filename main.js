@@ -332,7 +332,7 @@ function openModal(book) {
 
   state.opener = document.activeElement instanceof HTMLElement ? document.activeElement : el.draw;
   el.modal.showModal();
-  el.modal.scrollTop = 0;
+  el.modalReview.scrollTop = 0;
   el.modalClose.focus();
 }
 
