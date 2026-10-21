@@ -82,6 +82,48 @@ const isSig = (ch) => /[\p{L}\p{N}]/u.test(ch);
 const sig = (s) => [...s].filter(isSig).join("");
 const stripParen = (s) => s.replace(/^\([^)]*\)\s*/, "");
 
+const ROLE_WORD = /(?<=^|\s)(지음|엮음|글·그림|글|그림|저|편저|편|공저|씀|원작|기획|옮김)(?=\s|$|,)/;
+const SURNAMES = new Set("김이박최정강조윤장임한오서신권황안송류전홍고문양손배백허유남심노하곽성차주우구민진지엄채원천방공현함변염여추도소석선설마길연위표명기반라왕금옥육인맹제모탁국어은편용예경봉사부");
+const QUOTE = /[?!’‘'"“”:]/;
+const COUNT_WORD = /\d+(개|가지|년|번|일|시간|페이지)|\d[가-힣]+로$/;
+const nameToken = (t) => /^[가-힣]{1,6}$/.test(t) || /^[A-Z]\.$/.test(t);
+
+// 부제가 섞였다고 보는 조건: 다섯 단어 이상, 따옴표·물음표, 수량 표현, '~의'로 끝나는 단어
+function hasSubtitle(text) {
+  const tokens = text.split(" ").filter(Boolean);
+  return tokens.length >= 5 || QUOTE.test(text) || tokens.some((t) => COUNT_WORD.test(t) || /^[가-힣]+의$/.test(t));
+}
+
+// 저자 칸 앞에 섞인 부제를 떼어 낸다. 공동 저자 구분자(쉼표, ·)와 뒤쪽 역할어는 그대로 둔다.
+// 이름이 몇 단어인지는 추천 글에 그 이름이 나오는지로 정하고, 안 나오면 한국 성씨인지로 추정한다.
+function stripSubtitle(author, review) {
+  const m = author.match(ROLE_WORD);
+  if (!m) return author;
+  const names = author.slice(0, m.index).trim();
+  const rest = author.slice(m.index);
+  const parts = names.split(/(,\s+|\s*·\s*)/);
+  let last = -1;
+  for (let i = 0; i < parts.length; i += 2) {
+    if (hasSubtitle(parts[i])) last = i;
+  }
+  if (last < 0) return author;
+
+  const tokens = parts[last].split(" ").filter(Boolean);
+  let best = 0;
+  for (let k = 1; k <= Math.min(4, tokens.length - 1); k++) {
+    const suffix = tokens.slice(-k);
+    if (!suffix.every(nameToken)) break;
+    if (review.includes(suffix.join(" "))) best = k;
+  }
+  if (best === 0) {
+    const tail = tokens[tokens.length - 1];
+    best = /^[가-힣]{2,4}$/.test(tail) && SURNAMES.has(tail[0]) ? 1 : 2;
+    while (best > 1 && !tokens.slice(-best).every(nameToken)) best--;
+  }
+  const kept = [tokens.slice(-best).join(" "), ...parts.slice(last + 1)].join("");
+  return `${kept} ${rest}`.trim();
+}
+
 // 추천 글 뒤에 붙은 '함께 읽으면 좋은 책' 목록을 떼어 낸다.
 // 제목 문구 없이 마지막 인용 쪽수 '(N쪽)' 뒤에 다른 책의 청구기호가 이어지는 경우도 자른다.
 function cutRelated(review) {
@@ -146,12 +188,13 @@ function parseBook(item) {
   }
   if (end < 0) return null;
 
-  const author = first.slice(end)
+  let author = first.slice(end)
     .replace(/^[\s:.!?)\]]+/, "")
     .replace(/^(저자|지은이|글쓴이)\s*:\s*/, "")
     .trim();
   if (!author || JUNK.test(author)) return null;
   if (!ROLE.test(author) && (useComma || author.length > 15)) return null;
+  author = stripSubtitle(author, review);
 
   const publisher = segs[segs.length - 1].split(/\s*,\s*/).filter(Boolean).pop();
   if (!publisher || JUNK.test(publisher)) return null;
