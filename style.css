@@ -526,14 +526,21 @@ h1, h2, h3, p {
   letter-spacing: -.01em;
 }
 
-/* 모달에서 추천 글만 스크롤한다. 나머지 정보와 버튼은 늘 보인다. */
-.modal-review {
+/* 읽기 영역: 모바일에서는 책 속 한 문장과 추천 글을 함께 스크롤하고,
+   데스크톱에서는 추천 글만 스크롤한다. 서지정보와 버튼은 늘 보인다. */
+.modal-reading {
+  display: flex;
   flex: 1 1 auto;
+  flex-direction: column;
+  align-self: stretch;
   min-height: 96px;
-  margin-top: 8px;
   padding-right: 8px;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+.modal-review {
+  margin-top: 8px;
 }
 
 .modal-actions {
@@ -556,6 +563,20 @@ h1, h2, h3, p {
 
   .modal-cover {
     align-self: flex-start;
+  }
+
+  .modal-reading {
+    min-height: 0;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .modal-review {
+    flex: 1 1 auto;
+    min-height: 96px;
+    padding-right: 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .modal-title {

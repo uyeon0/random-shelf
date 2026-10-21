@@ -33,6 +33,7 @@ const TEXT = {
 };
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const desktop = window.matchMedia("(min-width: 1024px)");
 
 const $ = (id) => document.getElementById(id);
 const el = {
@@ -51,6 +52,7 @@ const el = {
   modalAuthor: $("modal-author"),
   modalPub: $("modal-pub"),
   modalReview: $("modal-review"),
+  modalReading: $("modal-reading"),
   modalQuote: $("modal-quote"),
   modalQuoteText: $("modal-quote-text"),
   linkLibrary: $("link-library"),
@@ -400,6 +402,7 @@ function openModal(book) {
 
   state.opener = document.activeElement instanceof HTMLElement ? document.activeElement : el.draw;
   el.modal.showModal();
+  el.modalReading.scrollTop = 0;
   el.modalReview.scrollTop = 0;
   el.modalClose.focus();
 }
@@ -421,6 +424,14 @@ el.redraw.addEventListener("click", () => {
   renderRoulette();
   if (state.set.length > 0) spin();
 });
+
+// 스크롤되는 쪽만 키보드 초점을 받도록 한다. 모바일은 읽기 영역 전체, 데스크톱은 추천 글.
+function syncReadingFocus() {
+  el.modalReading.tabIndex = desktop.matches ? -1 : 0;
+  el.modalReview.tabIndex = desktop.matches ? 0 : -1;
+}
+syncReadingFocus();
+desktop.addEventListener("change", syncReadingFocus);
 
 // ---------- 필터와 버튼 ----------
 
